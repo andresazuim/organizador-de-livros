@@ -41,7 +41,7 @@ const handler = nextConnect()
             }
 
             await livroModel.create(livroASerSalvo)
-            return res.status(400).json({ msg: 'Livro criado com sucesso!' })
+            return res.status(200).json({ msg: 'Livro criado com sucesso!' })
 
         } catch (e: any) {
             console.log(e);

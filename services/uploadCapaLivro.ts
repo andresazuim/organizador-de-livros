@@ -29,7 +29,7 @@ const uploadCapaLivro = async (req: any) => {
             buffer: req.file.buffer
         }
 
-        if(req.urle && req.url.includes){
+        if(req.url && req.url.includes){
             return await bucketLivros.addMedia({ media: objeto_media });
         }
     }

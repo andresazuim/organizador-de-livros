@@ -22,7 +22,7 @@ const endponintLivros = async (
                 autor: livroEncontrado.autor,
                 edicao: livroEncontrado.edicao,
                 categoria: livroEncontrado.categoria,
-                //avatar: 
+                capa: livroEncontrado.capa
             })
         }
         return res.status(405).json({ erro: 'Dados nao encontrados ' })
