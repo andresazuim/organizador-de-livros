@@ -5,6 +5,7 @@ const livroSchema = new Schema({
     autor: { type: String, required: true },
     edicao: { type: String, required: false },
     categoria: { type: String, required: false },
+    dataInclusao:{type: Date, required :true},
     capa: { type: String, required: false }
 })
 
