@@ -3,7 +3,7 @@ import nextConnect from "next-connect";
 import { requestToBodyStream } from "next/dist/server/body-streams";
 import { conectarMongoDB } from "../../middlewares/conectaMongoDB";
 import { livroModel } from "../../models/LivroSchema";
-import { upload, uploadCapaLivro } from "../../services/uploadCapaLivro";
+import { upload, uploadImagemCosmic } from "../../services/uploadImagemCosmic";
 import { cadastroReq } from "../../types/cadastroReq";
 
 
@@ -38,7 +38,7 @@ const handler = nextConnect()
             }
             
             //upload da imagem 
-            const image = await uploadCapaLivro(req)
+            const image = await uploadImagemCosmic(req)
             
             //livro salvo
             const livroASerSalvo = {
@@ -97,15 +97,16 @@ const handler = nextConnect()
         if(!livrosEncontrado){
             return res.status(404).json({erro : "Livro nao encontrado"})
         }
-        const capa = req.body.url
-
+        
+        const image = await uploadImagemCosmic(req)
+        
         livrosEncontrado.nome= livroAlterado.nome
         livrosEncontrado.autor = livroAlterado.autor
         livrosEncontrado.edicao = livroAlterado.edicao
         livrosEncontrado.categoria = livroAlterado.categoria
-        livrosEncontrado.capa = capa
+        livrosEncontrado.capa = image?.media?.url
         livrosEncontrado.dataInclusao = new Date().toISOString()
-
+        console.log(livrosEncontrado,'3')
         await livroModel.findByIdAndUpdate(idLivro,livrosEncontrado)
         
         return res.status(201).json({msg: "Livro alterado com sucesso"})

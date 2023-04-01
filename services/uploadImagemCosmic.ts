@@ -2,7 +2,9 @@ import multer from "multer";
 
 const {
     CHAVE_GRAVACAO_LIVROS,
-    BUCKET_LIVROS
+    BUCKET_LIVROS,
+    CHAVE_GRAVACAO_AVATAR,
+    BUCKET_AVATAR
 } = process.env
 
 const Cosmic = require("cosmicjs")
@@ -12,11 +14,16 @@ const bucketLivros = Cosmic().bucket({
     write_key: CHAVE_GRAVACAO_LIVROS
 })
 
+const bucketAvatar = Cosmic().bucket({
+    slug: CHAVE_GRAVACAO_AVATAR,
+    write_key: BUCKET_AVATAR
+})
+
 const storange = multer.memoryStorage()
 
 const upload = multer({ storage: storange })
 
-const uploadCapaLivro =  (req: any) => {
+const uploadImagemCosmic = async (req: any) => {
     if (req?.file?.originalname) {
 
         if (!req.file.originalname.includes('.png') &&
@@ -25,18 +32,20 @@ const uploadCapaLivro =  (req: any) => {
             throw new Error('Extensao da imagem invalida');
         }
 
-       
         const objeto_media = {
             originalname: req.file.originalname,
             buffer: req.file.buffer
         }
         
-        if(req.url && req.url.includes('livros')){
-            return bucketLivros.addMedia({ media: objeto_media });
+        if (req.url && req.url.includes('avatar')) {
+            return await bucketAvatar.addMedia({ media: objeto_media });
+        } else {
+            return await bucketLivros.addMedia({ media: objeto_media});
         }
         
     }
-    
+   
+   
 }    
 
-export { upload, uploadCapaLivro }
+export { upload, uploadImagemCosmic}
